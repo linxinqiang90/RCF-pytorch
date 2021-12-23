@@ -26,10 +26,8 @@ for i in files:
     img = np.array(Image.open(input+"/"+i), dtype=np.float32)
     img = prepare_image_PIL(img)
     _, H, W = img.shape
-    print(444, type(img))
     # img = img.transpose((2, 0, 1))
     img = torch.unsqueeze(torch.from_numpy(img).cpu(), 0)
-    print(img.shape)
     results = model(img)
 
     result = torch.squeeze(results[-1].detach()).cpu().numpy()
@@ -42,3 +40,4 @@ for i in files:
     result = Image.fromarray((result * 255).astype(np.uint8))
     result.save(os.path.join(save_dir, "%s.png" % i))
     print("Running test [%d/%d]" % (counter, len(os.listdir(input))))
+    counter += 1
