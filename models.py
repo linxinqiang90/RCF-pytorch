@@ -135,10 +135,10 @@ class RCF(nn.Module):
         so4_out = self.score_dsn4(conv4_1_down + conv4_2_down + conv4_3_down)
         so5_out = self.score_dsn5(conv5_1_down + conv5_2_down + conv5_3_down)
         ## transpose and crop way 
-        weight_deconv2 =  make_bilinear_weights(4, 1).cuda()
-        weight_deconv3 =  make_bilinear_weights(8, 1).cuda()
-        weight_deconv4 =  make_bilinear_weights(16, 1).cuda()
-        weight_deconv5 =  make_bilinear_weights(32, 1).cuda()
+        weight_deconv2 =  make_bilinear_weights(4, 1).cpu()
+        weight_deconv3 =  make_bilinear_weights(8, 1).cpu()
+        weight_deconv4 =  make_bilinear_weights(16, 1).cpu()
+        weight_deconv5 =  make_bilinear_weights(32, 1).cpu()
 
         upsample2 = torch.nn.functional.conv_transpose2d(so2_out, weight_deconv2, stride=2)
         upsample3 = torch.nn.functional.conv_transpose2d(so3_out, weight_deconv3, stride=4)
@@ -226,5 +226,5 @@ def make_bilinear_weights(size, num_channels):
 
 def upsample(input, stride, num_channels=1):
     kernel_size = stride * 2
-    kernel = make_bilinear_weights(kernel_size, num_channels).cuda()
+    kernel = make_bilinear_weights(kernel_size, num_channels).cpu()
     return torch.nn.functional.conv_transpose2d(input, kernel, stride=stride)
