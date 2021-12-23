@@ -35,9 +35,9 @@ for i in files:
     for i in range(len(results)):
       results_all[i, 0, :, :] = results[i]
 
-    torchvision.utils.save_image(1-results_all, os.path.join(save_dir, f"all_{i}"))
+    torchvision.utils.save_image(1-results_all, os.path.join(save_dir, f"all_{os.path.split(i)[0]}.jpg"))
 
     result = Image.fromarray((result * 255).astype(np.uint8))
-    result.save(os.path.join(save_dir, f"{i}" ))
+    result.save(os.path.join(save_dir, f"{os.path.split(i)[0]}.jpg" ))
     print("Running test [%d/%d]" % (counter, len(os.listdir(input))))
     counter += 1
