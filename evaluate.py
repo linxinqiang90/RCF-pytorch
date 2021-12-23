@@ -17,13 +17,13 @@ def prepare_image_PIL(im):
     im = np.transpose(im, (2, 0, 1))  # (H x W x C) to (C x H x W)
     return im
 
-for i in files:
+for item in files:
     model = RCF()
     model.eval()
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
-    img = np.array(Image.open(input+"/"+i), dtype=np.float32)
+    img = np.array(Image.open(input+"/"+item), dtype=np.float32)
     img = prepare_image_PIL(img)
     _, H, W = img.shape
     # img = img.transpose((2, 0, 1))
@@ -35,9 +35,10 @@ for i in files:
     for i in range(len(results)):
       results_all[i, 0, :, :] = results[i]
 
-    torchvision.utils.save_image(1-results_all, os.path.join(save_dir, f"all_{os.path.splitext(i)[0]}.jpg"))
+    parts = os.path.splitext(item)
+    torchvision.utils.save_image(1-results_all, os.path.join(save_dir, f"all_{parts[0]}.jpg"))
 
     result = Image.fromarray((result * 255).astype(np.uint8))
-    result.save(os.path.join(save_dir, f"{os.path.splitext(i)[0]}.jpg" ))
+    result.save(os.path.join(save_dir, f"{parts[0]}.jpg"))
     print("Running test [%d/%d]" % (counter, len(os.listdir(input))))
     counter += 1
